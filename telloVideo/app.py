@@ -4,7 +4,18 @@ import time
 import pygame
 import cv2 as cv
 import numpy
-import commands as droneCommands
+
+import sys
+
+if len(sys.argv) > 1:
+    if sys.argv[1] == 'debug':
+        print('Starting in debug mode...')
+        import commandsMock as droneCommands
+    else:
+        import commands as droneCommands
+else:
+        import commands as droneCommands
+
 
 
 #Screen and controls
@@ -93,7 +104,7 @@ def showDroneView():
                 elif event.key == pygame.K_i:
                     droneCommands.flipForward()
                 elif event.key == pygame.K_k:
-                    droneCommands.flipBack
+                    droneCommands.flipBack()
                 elif event.key == pygame.K_j:
                     droneCommands.flipLeft()
                 elif event.key == pygame.K_l:
