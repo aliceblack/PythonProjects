@@ -9,6 +9,8 @@ pygame.init()
 screen = pygame.display.set_mode((640, 480))
 pygame.display.set_caption('Pygame OpenCV face recognition')
 white = (255,255,255)
+text = pygame.font.Font(None, 25)
+
 
 face_cascade = cv2.CascadeClassifier('haarcascade_frontalface_default.xml')
 
@@ -24,10 +26,22 @@ while continueGame:
         roi_gray = gray[y:y+h, x:x+w]
         roi_color = frame[y:y+h, x:x+w]
         frame  = cv2.putText(frame, "x  "+str(x)+"  |  y "+str(y), (x, y), cv2.FONT_HERSHEY_SIMPLEX, .5,(255,255,255),2,cv2.LINE_AA)
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        if y<50:
+            frame  = cv2.putText(frame, "Too high", (100, 100), cv2.FONT_HERSHEY_SIMPLEX, .5,(255,255,255),2,cv2.LINE_AA)
+        if y>240:
+            frame  = cv2.putText(frame, "Too low", (100, 100), cv2.FONT_HERSHEY_SIMPLEX, .5,(255,255,255),2,cv2.LINE_AA)
+        if x<100:
+            frame  = cv2.putText(frame, "Too right", (100, 200), cv2.FONT_HERSHEY_SIMPLEX, .5,(255,255,255),2,cv2.LINE_AA)
+        if x>450:
+            frame  = cv2.putText(frame, "Too left", (100, 200), cv2.FONT_HERSHEY_SIMPLEX, .5,(255,255,255),2,cv2.LINE_AA)
     frame = numpy.rot90(frame)
+    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
     frame = pygame.surfarray.make_surface(frame)
     screen.blit(frame, (0,0))
+    if len(faces)>0:
+        if len(faces[0])>0:
+            label = text.render("x -> "+str(faces[0][0]), 1, white)
+            screen.blit(label, (400, 410))
     pygame.display.update()
     # press esc to quit
     for event in pygame.event.get():
